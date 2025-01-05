@@ -1,19 +1,41 @@
-from fastapi import FastAPI
-
+from fastapi import FastAPI, Query
+from typing import Optional
+from datetime import date
+from pydantic import BaseModel
 app = FastAPI()
 
 
-@app.get("/hotels/")
-def get_hotels(
-        location,
-        date_from,
-        date_to,
-        stars,
-        has_spa,
-):
-    return date_from, date_to
+class SHotel(BaseModel):
+    address: str
+    name: str
+    stars: int
+    # has_spa: bool
 
-# import requests
-#
-# r = requests.get("http://127.0.0.1:8000/hotels/1",
-#                  params={"date_from": "today", "date_to":"now"})
+
+@app.get("/hotels")
+def get_hotels(
+        location: str,
+        date_from: date,
+        date_to: date,
+        has_spa: Optional[bool] = None,
+        stars: Optional[int] = Query(None, ge=1, le=5),
+) -> list[SHotel]:
+
+    hotels = [
+        {
+            "address": "Gagarina street, 1",
+            "name": "Gagarin",
+            "stars": 5,
+        }
+    ]
+    return hotels
+
+
+class SBooking(BaseModel):
+    room_id: int
+    date_from: date
+    date_to: date
+
+@app.post("/bookings")
+def add_booking(booking: SBooking):
+    pass
