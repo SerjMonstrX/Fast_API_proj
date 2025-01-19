@@ -1,6 +1,7 @@
 from sqlalchemy import Integer, String, Column, JSON
 from app.database import Base
 
+
 class Hotels(Base):
     __tablename__ = 'hotels'
     
